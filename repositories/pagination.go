@@ -12,7 +12,7 @@ import (
 func Paginate(c *gin.Context) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		pageStr := c.DefaultQuery("page", "1")
-		pageLimitStr := c.DefaultQuery("pageLimit", "1")
+		pageLimitStr := c.DefaultQuery("pageLimit", "10")
 		page := generalUtilities.ConvertStringToInt(pageStr)
 		pageLimit := generalUtilities.ConvertStringToInt(pageLimitStr)
 		if page <= 0 {

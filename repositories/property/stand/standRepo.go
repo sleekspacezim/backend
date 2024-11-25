@@ -4,6 +4,7 @@ import (
 	"SleekSpace/db"
 	managerModels "SleekSpace/models/manager"
 	pagination "SleekSpace/repositories"
+	sort "SleekSpace/repositories/scopes"
 	"errors"
 
 	"github.com/gin-gonic/gin"
@@ -63,8 +64,8 @@ func GetAllStands(c *gin.Context) []managerModels.PropertyStand {
 	err := db.DB.Preload(clause.Associations).
 		Preload("Manager.ProfilePicture").
 		Preload("Manager.ManagerContactNumbers").
-		Order("created_at DESC, id DESC").
-		Scopes(pagination.Paginate(c)).Find(&stands)
+		Scopes(pagination.Paginate(c), sort.SortProperties(c)).
+		Find(&stands)
 	if err != nil {
 		println(err.Error, err.Name())
 	}
