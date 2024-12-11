@@ -14,8 +14,8 @@ import (
 func GetFavoriteStandProperties(
 	standPropertiesIds []int,
 	c *gin.Context,
-) []managerModels.PropertyStand {
-	var properties = []managerModels.PropertyStand{}
+) []managerModels.Stand {
+	var properties = []managerModels.Stand{}
 	result := db.DB.Where("id IN ?", standPropertiesIds).
 		Preload(clause.Associations).
 		Preload("Manager.ProfilePicture").

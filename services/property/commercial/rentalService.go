@@ -227,6 +227,50 @@ func GetAllCommercialRentalPropertiesForLoggedOutUser(c *gin.Context) {
 	})
 }
 
+func GetAllCommercialRentalPropertiesByLocationForLoggedInUser(c *gin.Context) {
+	commercialRentalProperties := commercialRepo.GetAllCommercialRentalPropertiesByLocation(c, c.Param("location"))
+	responseList := []commercialDtos.CommercialForRentPropertyWithManagerResponseDto{}
+	if len(commercialRentalProperties) > 0 {
+		for i := 0; i < len(commercialRentalProperties); i++ {
+			responseItem := propertyUtilities.CommercialPropertyForRentWithManagerResponse(commercialRentalProperties[i])
+			responseList = append(responseList, responseItem)
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"properties": favoritesUtilities.ProcessFavoritesForCommercialRentalPropertyWithManager(responseList, c),
+			"totalPages": c.GetInt("totalPages"),
+			"count":      c.GetInt64("count"),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"properties": responseList,
+		"totalPages": c.GetInt("totalPages"),
+		"count":      c.GetInt64("count"),
+	})
+}
+
+func GetAllCommercialRentalPropertiesByLocationForLoggedOutUser(c *gin.Context) {
+	commercialRentalProperties := commercialRepo.GetAllCommercialRentalPropertiesByLocation(c, c.Param("location"))
+	responseList := []commercialDtos.CommercialForRentPropertyWithManagerResponseDto{}
+	if len(commercialRentalProperties) > 0 {
+		for i := 0; i < len(commercialRentalProperties); i++ {
+			responseItem := propertyUtilities.CommercialPropertyForRentWithManagerResponse(commercialRentalProperties[i])
+			responseList = append(responseList, responseItem)
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"properties": responseList,
+			"totalPages": c.GetInt("totalPages"),
+			"count":      c.GetInt64("count"),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"properties": responseList,
+		"totalPages": c.GetInt("totalPages"),
+		"count":      c.GetInt64("count"),
+	})
+}
+
 func GetManagerCommercialRentalPropertiesByManagerId(c *gin.Context) {
 	properties := commercialRepo.GetManagerCommercialRentalPropertiesByManagerId(c.Param("id"))
 	propertiesResponse := []commercialDtos.CommercialForRentPropertyResponseDto{}

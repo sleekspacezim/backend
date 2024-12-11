@@ -45,7 +45,7 @@ func CreateStandForSale(c *gin.Context) {
 	mediaList := propertyUtilities.MediaListWithNoPropertyId(standInfo.Media)
 	mediaUrls := storage.UploadFiles(mediaList, c)
 
-	newStandForSale := managerModels.PropertyStand{
+	newStandForSale := managerModels.Stand{
 		ManagerId:          standInfo.ManagerId,
 		UniqueId:           propertyUtilities.GeneratePropertyUniqueId(),
 		Price:              standInfo.Price,
@@ -225,6 +225,50 @@ func GetManagerStandsByManagerId(c *gin.Context) {
 		}
 	}
 	c.JSON(http.StatusOK, gin.H{"response": standsResponse})
+}
+
+func GetAllStandsByLocationForLoggedInUser(c *gin.Context) {
+	stands := standRepo.GetAllStandsByLocation(c, c.Param("location"))
+	responseList := []standDtos.StandWithManagerResponseDTO{}
+	if len(stands) > 0 {
+		for i := 0; i < len(stands); i++ {
+			responseItem := propertyUtilities.PropertyStandWithManagerResponse(stands[i])
+			responseList = append(responseList, responseItem)
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"properties": favoritesUtilities.ProcessFavoritesForStandPropertyWithManager(responseList, c),
+			"totalPages": c.GetInt("totalPages"),
+			"count":      c.GetInt64("count"),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"properties": responseList,
+		"totalPages": c.GetInt("totalPages"),
+		"count":      c.GetInt64("count"),
+	})
+}
+
+func GetAllStandsByLocationForLoggedOutUser(c *gin.Context) {
+	stands := standRepo.GetAllStandsByLocation(c, c.Param("location"))
+	responseList := []standDtos.StandWithManagerResponseDTO{}
+	if len(stands) > 0 {
+		for i := 0; i < len(stands); i++ {
+			responseItem := propertyUtilities.PropertyStandWithManagerResponse(stands[i])
+			responseList = append(responseList, responseItem)
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"properties": responseList,
+			"totalPages": c.GetInt("totalPages"),
+			"count":      c.GetInt64("count"),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"properties": responseList,
+		"totalPages": c.GetInt("totalPages"),
+		"count":      c.GetInt64("count"),
+	})
 }
 
 func DeleteStandById(c *gin.Context) {

@@ -67,7 +67,7 @@ func SortProperties(c *gin.Context) func(db *gorm.DB) *gorm.DB {
 			return db.Order("size_dimensions ASC, size_number DESC, id DESC")
 		}
 	}
-	if sortingField == "oldest_by_year" {
+	if sortingField == "year_built_oldest_to_new" {
 		return func(db *gorm.DB) *gorm.DB {
 			return db.Order("year_built ASC, id DESC")
 		}

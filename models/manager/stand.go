@@ -5,7 +5,7 @@ import (
 	propertyModels "SleekSpace/models/property"
 )
 
-type PropertyStand struct {
+type Stand struct {
 	baseModel.MyModel
 	Id                 int                                   `json:"id" gorm:"primary_key"`
 	ManagerId          int                                   `json:"managerId"`

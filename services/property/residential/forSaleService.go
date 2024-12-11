@@ -211,6 +211,50 @@ func GetAllResidentialForSalePropertiesForLoggedInUser(c *gin.Context) {
 	})
 }
 
+func GetAllResidentialForSalePropertiesByLocationForLoggedInUser(c *gin.Context) {
+	residentialForSaleProperties := residentialRepo.GetAllResidentialPropertiesForSaleByLocation(c, c.Param("location"))
+	responseList := []residentialDtos.ResidentialPropertyForSaleWithManagerResponseDto{}
+	if len(residentialForSaleProperties) > 0 {
+		for i := 0; i < len(residentialForSaleProperties); i++ {
+			responseItem := propertyUtilities.ResidentialForSalePropertyWithManagerResponse(residentialForSaleProperties[i])
+			responseList = append(responseList, responseItem)
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"properties": favoritesUtilities.ProcessFavoritesForResidentialForSalePropertyWithManager(responseList, c),
+			"totalPages": c.GetInt("totalPages"),
+			"count":      c.GetInt64("count"),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"properties": responseList,
+		"totalPages": c.GetInt("totalPages"),
+		"count":      c.GetInt64("count"),
+	})
+}
+
+func GetAllResidentialForSalePropertiesByLocationForLoggedOutUser(c *gin.Context) {
+	residentialForSaleProperties := residentialRepo.GetAllResidentialPropertiesForSaleByLocation(c, c.Param("location"))
+	responseList := []residentialDtos.ResidentialPropertyForSaleWithManagerResponseDto{}
+	if len(residentialForSaleProperties) > 0 {
+		for i := 0; i < len(residentialForSaleProperties); i++ {
+			responseItem := propertyUtilities.ResidentialForSalePropertyWithManagerResponse(residentialForSaleProperties[i])
+			responseList = append(responseList, responseItem)
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"properties": responseList,
+			"totalPages": c.GetInt("totalPages"),
+			"count":      c.GetInt64("count"),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"properties": responseList,
+		"totalPages": c.GetInt("totalPages"),
+		"count":      c.GetInt64("count"),
+	})
+}
+
 func GetResidentialPropertyForSaleByIdLoggedOutUser(c *gin.Context) {
 	residentialPropertyForSale := residentialRepo.GetResidentialPropertyForSaleWithAllAssociationsById(c.Param("id"))
 	if residentialPropertyForSale == nil {

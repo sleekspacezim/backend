@@ -7,7 +7,7 @@ import (
 	managerUtilities "SleekSpace/utilities/funcs/manager"
 )
 
-func PropertyStandResponse(standModel managerModels.PropertyStand) propertyStandDtos.StandResponseDTO {
+func PropertyStandResponse(standModel managerModels.Stand) propertyStandDtos.StandResponseDTO {
 	return propertyStandDtos.StandResponseDTO{
 		Id:                 standModel.Id,
 		ManagerId:          standModel.ManagerId,
@@ -32,7 +32,7 @@ func PropertyStandResponse(standModel managerModels.PropertyStand) propertyStand
 	}
 }
 
-func PropertyStandWithManagerResponse(standModel managerModels.PropertyStand) propertyStandDtos.StandWithManagerResponseDTO {
+func PropertyStandWithManagerResponse(standModel managerModels.Stand) propertyStandDtos.StandWithManagerResponseDTO {
 	return propertyStandDtos.StandWithManagerResponseDTO{
 		Id:                 standModel.Id,
 		ManagerId:          standModel.ManagerId,

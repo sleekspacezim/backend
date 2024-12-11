@@ -16,6 +16,6 @@ type Manager struct {
 	CommercialRentalProperty   []CommercialRentalProperty   `gorm:"ForeignKey:ManagerId;references:Id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	ResidentialPropertyForSale []ResidentialPropertyForSale `gorm:"ForeignKey:ManagerId;references:Id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	ResidentialRentalProperty  []ResidentialRentalProperty  `gorm:"ForeignKey:ManagerId;references:Id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
-	PropertyStand              []PropertyStand              `gorm:"ForeignKey:ManagerId;references:Id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Stand                      []Stand                      `gorm:"ForeignKey:ManagerId;references:Id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	LandForSaleProperty        []LandForSaleProperty        `gorm:"ForeignKey:ManagerId;references:Id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }

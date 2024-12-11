@@ -81,6 +81,25 @@ func GetAllLandPropertiesForSale(c *gin.Context) []managerModels.LandForSaleProp
 	return properties
 }
 
+func GetAllLandPropertiesByLocation(
+	c *gin.Context,
+	location string,
+) []managerModels.LandForSaleProperty {
+	var properties = []managerModels.LandForSaleProperty{}
+	err := db.DB.
+		Preload(clause.Associations).
+		Preload("Manager.ProfilePicture").
+		Preload("Manager.ManagerContactNumbers").
+		Joins("JOIN property_locations ON property_locations.property_id = land_for_sale_properties.unique_id").
+		Where("property_locations.display_name ILIKE ?", "%"+location+"%").
+		Scopes(pagination.Paginate(c), sort.SortProperties(c)).
+		Find(&properties)
+	if err != nil {
+		println(err.Error, err.Name())
+	}
+	return properties
+}
+
 func UpdateLandPropertyForSale(update *managerModels.LandForSaleProperty) bool {
 	db.DB.Save(update)
 	return true

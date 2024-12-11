@@ -227,6 +227,50 @@ func GetManagerLandPropertiesByManagerId(c *gin.Context) {
 	})
 }
 
+func GetAllLandPropertiesByLocationForLoggedInUser(c *gin.Context) {
+	landProperties := landRepo.GetAllLandPropertiesByLocation(c, c.Param("location"))
+	responseList := []landDtos.LandForSalePropertyWithManagerResponseDto{}
+	if len(landProperties) > 0 {
+		for i := 0; i < len(landProperties); i++ {
+			responseItem := propertyUtilities.LandPropertyWithManagerResponse(landProperties[i])
+			responseList = append(responseList, responseItem)
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"properties": favoritesUtilities.ProcessFavoritesForLandPropertyWithManager(responseList, c),
+			"totalPages": c.GetInt("totalPages"),
+			"count":      c.GetInt64("count"),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"properties": responseList,
+		"totalPages": c.GetInt("totalPages"),
+		"count":      c.GetInt64("count"),
+	})
+}
+
+func GetAllLandPropertiesByLocationForLoggedOutUser(c *gin.Context) {
+	landProperties := landRepo.GetAllLandPropertiesByLocation(c, c.Param("location"))
+	responseList := []landDtos.LandForSalePropertyWithManagerResponseDto{}
+	if len(landProperties) > 0 {
+		for i := 0; i < len(landProperties); i++ {
+			responseItem := propertyUtilities.LandPropertyWithManagerResponse(landProperties[i])
+			responseList = append(responseList, responseItem)
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"properties": responseList,
+			"totalPages": c.GetInt("totalPages"),
+			"count":      c.GetInt64("count"),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"properties": responseList,
+		"totalPages": c.GetInt("totalPages"),
+		"count":      c.GetInt64("count"),
+	})
+}
+
 func DeleteLandPropertyById(c *gin.Context) {
 	landProperty := landRepo.GetLandPropertyForSaleWithAllAssociationsById(c.Param("id"))
 	if len(landProperty.PropertyMedia) > 0 {
