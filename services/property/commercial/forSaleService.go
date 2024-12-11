@@ -187,6 +187,50 @@ func GetAllCommercialForSalePropertiesForLoggedInUser(c *gin.Context) {
 	})
 }
 
+func GetAllCommercialForSalePropertiesByLocationForLoggedInUser(c *gin.Context) {
+	commercialForSaleProperties := commercialRepo.GetAllCommercialPropertiesForSaleByLocation(c, c.Param("location"))
+	responseList := []commercialDtos.CommercialForSalePropertyWithManagerResponseDto{}
+	if len(commercialForSaleProperties) > 0 {
+		for i := 0; i < len(commercialForSaleProperties); i++ {
+			responseItem := propertyUtilities.CommercialPropertyForSaleWithManagerResponse(commercialForSaleProperties[i])
+			responseList = append(responseList, responseItem)
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"properties": favoritesUtilities.ProcessFavoritesForCommercialForSalePropertyWithManager(responseList, c),
+			"totalPages": c.GetInt("totalPages"),
+			"count":      c.GetInt64("count"),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"properties": responseList,
+		"totalPages": c.GetInt("totalPages"),
+		"count":      c.GetInt64("count"),
+	})
+}
+
+func GetAllCommercialForSalePropertiesByLocationForLoggedOutUser(c *gin.Context) {
+	commercialForSaleProperties := commercialRepo.GetAllCommercialPropertiesForSaleByLocation(c, c.Param("location"))
+	responseList := []commercialDtos.CommercialForSalePropertyWithManagerResponseDto{}
+	if len(commercialForSaleProperties) > 0 {
+		for i := 0; i < len(commercialForSaleProperties); i++ {
+			responseItem := propertyUtilities.CommercialPropertyForSaleWithManagerResponse(commercialForSaleProperties[i])
+			responseList = append(responseList, responseItem)
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"properties": responseList,
+			"totalPages": c.GetInt("totalPages"),
+			"count":      c.GetInt64("count"),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"properties": responseList,
+		"totalPages": c.GetInt("totalPages"),
+		"count":      c.GetInt64("count"),
+	})
+}
+
 func GetCommercialPropertyForSaleByIdForLoggedOutUser(c *gin.Context) {
 	commercialPropertyForSale := commercialRepo.GetCommercialPropertyForSaleWithAllAssociationsById(c.Param("id"))
 	if commercialPropertyForSale == nil {

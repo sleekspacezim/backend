@@ -31,7 +31,10 @@ func GetResidentialPropertyForSaleById(id string) *managerModels.ResidentialProp
 
 func GetResidentialPropertyForSaleWithAllAssociationsById(id string) *managerModels.ResidentialPropertyForSale {
 	var property managerModels.ResidentialPropertyForSale
-	result := db.DB.Preload(clause.Associations).Preload("Manager.ProfilePicture").Preload("Manager.ManagerContactNumbers").First(&property, id)
+	result := db.DB.Preload(clause.Associations).
+		Preload("Manager.ProfilePicture").
+		Preload("Manager.ManagerContactNumbers").
+		First(&property, id)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil
 	}
@@ -61,6 +64,25 @@ func GetAllResidentialPropertiesForSale(c *gin.Context) []managerModels.Resident
 	err := db.DB.Preload(clause.Associations).
 		Preload("Manager.ProfilePicture").
 		Preload("Manager.ManagerContactNumbers").
+		Scopes(pagination.Paginate(c), sort.SortProperties(c)).
+		Find(&properties)
+	if err != nil {
+		println(err.Error, err.Name())
+	}
+	return properties
+}
+
+func GetAllResidentialPropertiesForSaleByLocation(
+	c *gin.Context,
+	location string,
+) []managerModels.ResidentialPropertyForSale {
+	var properties = []managerModels.ResidentialPropertyForSale{}
+	err := db.DB.
+		Preload(clause.Associations).
+		Preload("Manager.ProfilePicture").
+		Preload("Manager.ManagerContactNumbers").
+		Joins("JOIN property_locations ON property_locations.property_id = residential_property_for_sales.unique_id").
+		Where("property_locations.display_name ILIKE ?", "%"+location+"%").
 		Scopes(pagination.Paginate(c), sort.SortProperties(c)).
 		Find(&properties)
 	if err != nil {

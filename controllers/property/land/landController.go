@@ -11,6 +11,15 @@ func LandPropertyRoutes(router *gin.Engine) {
 	routes := router.Group("/property/land")
 	{
 		routes.POST("", middleware.AuthValidator, landService.CreateLandPropertyForSale)
+		routes.GET(
+			"/search/:location",
+			landService.GetAllLandPropertiesByLocationForLoggedOutUser,
+		)
+		routes.GET(
+			"/search/logged-in/:location",
+			middleware.AuthValidator,
+			landService.GetAllLandPropertiesByLocationForLoggedInUser,
+		)
 		routes.GET("", landService.GetAllLandPropertiesForLoggedOutUser)
 		routes.GET("/:id", landService.GetLandPropertyByIdForLoggedOutUser)
 		routes.GET("/logged-in", middleware.AuthValidator, landService.GetAllLandPropertiesForLoggedInUser)

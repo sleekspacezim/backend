@@ -32,7 +32,7 @@ func Connect() {
 		&managerModels.LandForSaleProperty{},
 		&managerModels.ResidentialPropertyForSale{},
 		&managerModels.ResidentialRentalProperty{},
-		&managerModels.PropertyStand{},
+		&managerModels.Stand{},
 	)
 
 	db.AutoMigrate(

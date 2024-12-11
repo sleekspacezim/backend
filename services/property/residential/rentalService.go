@@ -213,6 +213,50 @@ func GetAllResidentialRentalPropertiesForLoggedOutUser(c *gin.Context) {
 	})
 }
 
+func GetAllResidentialRentalPropertiesByLocationForLoggedInUser(c *gin.Context) {
+	residentialRentalProperties := residentialRepo.GetAllResidentialRentalPropertiesByLocation(c, c.Param("location"))
+	responseList := []residentialDtos.ResidentialPropertyForRentWithManagerResponseDto{}
+	if len(residentialRentalProperties) > 0 {
+		for i := 0; i < len(residentialRentalProperties); i++ {
+			responseItem := propertyUtilities.ResidentialRentalPropertyWithManagerResponse(residentialRentalProperties[i])
+			responseList = append(responseList, responseItem)
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"properties": favoritesUtilities.ProcessFavoritesForResidentialRentalPropertyWithManager(responseList, c),
+			"totalPages": c.GetInt("totalPages"),
+			"count":      c.GetInt64("count"),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"properties": responseList,
+		"totalPages": c.GetInt("totalPages"),
+		"count":      c.GetInt64("count"),
+	})
+}
+
+func GetAllResidentialRentalPropertiesByLocationForLoggedOutUser(c *gin.Context) {
+	residentialRentalProperties := residentialRepo.GetAllResidentialRentalPropertiesByLocation(c, c.Param("location"))
+	responseList := []residentialDtos.ResidentialPropertyForRentWithManagerResponseDto{}
+	if len(residentialRentalProperties) > 0 {
+		for i := 0; i < len(residentialRentalProperties); i++ {
+			responseItem := propertyUtilities.ResidentialRentalPropertyWithManagerResponse(residentialRentalProperties[i])
+			responseList = append(responseList, responseItem)
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"properties": responseList,
+			"totalPages": c.GetInt("totalPages"),
+			"count":      c.GetInt64("count"),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"properties": responseList,
+		"totalPages": c.GetInt("totalPages"),
+		"count":      c.GetInt64("count"),
+	})
+}
+
 func GetResidentialRentalPropertyIdForLoggedOutUser(c *gin.Context) {
 	residentialRentalProperty := residentialRepo.GetResidentialRentalPropertyWithAllAssociationsById(c.Param("id"))
 	if residentialRentalProperty == nil {

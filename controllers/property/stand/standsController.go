@@ -11,6 +11,15 @@ func StandsRoutes(router *gin.Engine) {
 	routes := router.Group("/property/stand")
 	{
 		routes.POST("", middleware.AuthValidator, standService.CreateStandForSale)
+		routes.GET(
+			"/search/:location",
+			standService.GetAllStandsByLocationForLoggedOutUser,
+		)
+		routes.GET(
+			"/search/logged-in/:location",
+			middleware.AuthValidator,
+			standService.GetAllStandsByLocationForLoggedInUser,
+		)
 		routes.GET("", standService.GetAllStandsForLoggedOutUser)
 		routes.GET("/:id", standService.GetStandByIdForLoggedOutUser)
 		routes.GET("/logged-in", middleware.AuthValidator, standService.GetAllStandsForLoggedInUser)

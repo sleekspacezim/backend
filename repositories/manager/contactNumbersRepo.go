@@ -17,7 +17,10 @@ func GetManagerContactNumbersByManagerId(managerId int) []managerModels.ManagerC
 	return manager.ManagerContactNumbers
 }
 
-func UpdateManagerContactNumbers(manager *managerModels.Manager, updateManagerContactNumbersList []managerModels.ManagerContactNumber) bool {
+func UpdateManagerContactNumbers(
+	manager *managerModels.Manager,
+	updateManagerContactNumbersList []managerModels.ManagerContactNumber,
+) bool {
 	manager.ManagerContactNumbers = updateManagerContactNumbersList
 	db.DB.Session(&gorm.Session{FullSaveAssociations: true}).Updates(&manager)
 	return true

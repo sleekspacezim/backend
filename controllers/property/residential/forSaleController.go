@@ -11,11 +11,36 @@ func ResidentialPropertyForSaleRoutes(router *gin.Engine) {
 	routes := router.Group("/property/residential/onsale")
 	{
 		routes.POST("", middleware.AuthValidator, residentialService.CreateResidentialPropertyForSale)
+		routes.GET(
+			"/search/:location",
+			residentialService.GetAllResidentialForSalePropertiesByLocationForLoggedOutUser,
+		)
+		routes.GET(
+			"/search/logged-in/:location",
+			middleware.AuthValidator,
+			residentialService.GetAllResidentialForSalePropertiesByLocationForLoggedInUser,
+		)
 		routes.GET("", residentialService.GetAllResidentialForSalePropertiesForLoggedOutUser)
-		routes.GET("/logged-in", middleware.AuthValidator, residentialService.GetAllResidentialForSalePropertiesForLoggedInUser)
+		routes.GET(
+			"/logged-in",
+			middleware.AuthValidator,
+			residentialService.GetAllResidentialForSalePropertiesForLoggedInUser,
+		)
 		routes.GET("/:id", residentialService.GetResidentialPropertyForSaleByIdLoggedOutUser)
-		routes.GET("/logged-in/:id", middleware.AuthValidator, residentialService.GetResidentialPropertyForSaleByIdLoggedInUser)
-		routes.DELETE("/:id", middleware.AuthValidator, residentialService.DeleteResidentialPropertyForSaleById)
-		routes.PUT("/:id", middleware.AuthValidator, residentialService.UpdateResidentialPropertyForSaleDetails)
+		routes.GET(
+			"/logged-in/:id",
+			middleware.AuthValidator,
+			residentialService.GetResidentialPropertyForSaleByIdLoggedInUser,
+		)
+		routes.DELETE(
+			"/:id",
+			middleware.AuthValidator,
+			residentialService.DeleteResidentialPropertyForSaleById,
+		)
+		routes.PUT(
+			"/:id",
+			middleware.AuthValidator,
+			residentialService.UpdateResidentialPropertyForSaleDetails,
+		)
 	}
 }

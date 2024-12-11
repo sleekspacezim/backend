@@ -75,6 +75,22 @@ func GetAllResidentialRentalProperties(c *gin.Context) []managerModels.Residenti
 	return properties
 }
 
+func GetAllResidentialRentalPropertiesByLocation(c *gin.Context, location string) []managerModels.ResidentialRentalProperty {
+	var properties = []managerModels.ResidentialRentalProperty{}
+	err := db.DB.
+		Preload(clause.Associations).
+		Preload("Manager.ProfilePicture").
+		Preload("Manager.ManagerContactNumbers").
+		Joins("JOIN property_locations ON property_locations.property_id = residential_rental_properties.unique_id").
+		Where("property_locations.display_name ILIKE ?", "%"+location+"%").
+		Scopes(pagination.Paginate(c), sort.SortProperties(c)).
+		Find(&properties)
+	if err != nil {
+		println(err.Error, err.Name())
+	}
+	return properties
+}
+
 func UpdateResidentialRentalProperty(update *managerModels.ResidentialRentalProperty) bool {
 	db.DB.Save(update)
 	return true

@@ -44,7 +44,10 @@ func GetCommercialPropertyForSaleWithAllAssociationsByUniqueId(uniqueId string) 
 
 func GetCommercialPropertyForSaleWithAllAssociationsById(id string) *managerModels.CommercialForSaleProperty {
 	var property managerModels.CommercialForSaleProperty
-	result := db.DB.Preload(clause.Associations).Preload("Manager.ProfilePicture").Preload("Manager.ManagerContactNumbers").First(&property, id)
+	result := db.DB.Preload(clause.Associations).
+		Preload("Manager.ProfilePicture").
+		Preload("Manager.ManagerContactNumbers").
+		First(&property, id)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil
 	}
@@ -65,6 +68,25 @@ func GetAllCommercialPropertiesForSale(c *gin.Context) []managerModels.Commercia
 	err := db.DB.Preload(clause.Associations).
 		Preload("Manager.ProfilePicture").
 		Preload("Manager.ManagerContactNumbers").
+		Scopes(pagination.Paginate(c), sort.SortProperties(c)).
+		Find(&properties)
+	if err != nil {
+		println(err.Error, err.Name())
+	}
+	return properties
+}
+
+func GetAllCommercialPropertiesForSaleByLocation(
+	c *gin.Context,
+	location string,
+) []managerModels.CommercialForSaleProperty {
+	var properties = []managerModels.CommercialForSaleProperty{}
+	err := db.DB.
+		Preload(clause.Associations).
+		Preload("Manager.ProfilePicture").
+		Preload("Manager.ManagerContactNumbers").
+		Joins("JOIN property_locations ON property_locations.property_id = commercial_for_sale_properties.unique_id").
+		Where("property_locations.display_name ILIKE ?", "%"+location+"%").
 		Scopes(pagination.Paginate(c), sort.SortProperties(c)).
 		Find(&properties)
 	if err != nil {

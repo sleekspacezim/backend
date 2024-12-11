@@ -72,6 +72,22 @@ func GetAllCommercialRentalProperties(c *gin.Context) []managerModels.Commercial
 	return properties
 }
 
+func GetAllCommercialRentalPropertiesByLocation(c *gin.Context, location string) []managerModels.CommercialRentalProperty {
+	var properties = []managerModels.CommercialRentalProperty{}
+	err := db.DB.
+		Preload(clause.Associations).
+		Preload("Manager.ProfilePicture").
+		Preload("Manager.ManagerContactNumbers").
+		Joins("JOIN property_locations ON property_locations.property_id = commercial_rental_properties.unique_id").
+		Where("property_locations.display_name ILIKE ?", "%"+location+"%").
+		Scopes(pagination.Paginate(c), sort.SortProperties(c)).
+		Find(&properties)
+	if err != nil {
+		println(err.Error, err.Name())
+	}
+	return properties
+}
+
 func UpdateCommercialRentalProperty(update *managerModels.CommercialRentalProperty) bool {
 	db.DB.Save(update)
 	return true

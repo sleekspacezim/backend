@@ -11,6 +11,8 @@ func ResidentialRentalPropertyRoutes(router *gin.Engine) {
 	routes := router.Group("/property/residential/rentals")
 	{
 		routes.POST("", middleware.AuthValidator, residentialService.CreateResidentialRentalProperty)
+		routes.GET("/search/:location", residentialService.GetAllResidentialRentalPropertiesByLocationForLoggedOutUser)
+		routes.GET("/search/logged-in/:location", middleware.AuthValidator, residentialService.GetAllResidentialRentalPropertiesByLocationForLoggedInUser)
 		routes.GET("", residentialService.GetAllResidentialRentalPropertiesForLoggedOutUser)
 		routes.GET("/logged-in", middleware.AuthValidator, residentialService.GetAllResidentialRentalPropertiesForLoggedInUser)
 		routes.GET("/:id", residentialService.GetResidentialRentalPropertyIdForLoggedOutUser)
