@@ -11,6 +11,7 @@ type CommercialForRentPropertyCreationDto struct {
 	ManagerId             int                                                                `json:"managerId"`
 	UniqueId              int                                                                `json:"uniqueId"`
 	NumberOfRooms         int                                                                `json:"numberOfRooms"`
+	NumberOfRoomsToLet    int                                                                `json:"numberOfRoomsToLet"`
 	RentAmount            int                                                                `json:"rentAmount"`
 	SizeNumber            int                                                                `json:"sizeNumber"`
 	YearBuilt             int                                                                `json:"yearBuilt"`
@@ -36,6 +37,7 @@ type CommercialForRentPropertyResponseDto struct {
 	ManagerId             int                                                `json:"managerId"`
 	UniqueId              int                                                `json:"uniqueId"`
 	NumberOfRooms         int                                                `json:"numberOfRooms"`
+	NumberOfRoomsToLet    int                                                `json:"numberOfRoomsToLet"`
 	RentAmount            int                                                `json:"rentAmount"`
 	SizeNumber            int                                                `json:"sizeNumber"`
 	YearBuilt             int                                                `json:"yearBuilt"`
@@ -62,6 +64,7 @@ type CommercialForRentPropertyWithManagerResponseDto struct {
 	ManagerId             int                                                `json:"managerId"`
 	UniqueId              int                                                `json:"uniqueId"`
 	NumberOfRooms         int                                                `json:"numberOfRooms"`
+	NumberOfRoomsToLet    int                                                `json:"numberOfRoomsToLet"`
 	RentAmount            int                                                `json:"rentAmount"`
 	SizeNumber            int                                                `json:"sizeNumber"`
 	YearBuilt             int                                                `json:"yearBuilt"`
@@ -90,6 +93,7 @@ type CommercialForRentPropertyUpdateDto struct {
 	ManagerId             int      `json:"managerId"`
 	UniqueId              int      `json:"uniqueId"`
 	NumberOfRooms         int      `json:"numberOfRooms"`
+	NumberOfRoomsToLet    int      `json:"numberOfRoomsToLet"`
 	RentAmount            int      `json:"rentAmount"`
 	SizeNumber            int      `json:"sizeNumber"`
 	YearBuilt             int      `json:"yearBuilt"`

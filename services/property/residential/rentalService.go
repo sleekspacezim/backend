@@ -73,7 +73,7 @@ func CreateResidentialRentalProperty(c *gin.Context) {
 		IsTiled:                residentialRentalPropertyDetails.IsTiled,
 		HasBoreHole:            residentialRentalPropertyDetails.HasBoreHole,
 		HasCeiling:             residentialRentalPropertyDetails.HasCeiling,
-		TotalNumberOfRooms:     residentialRentalPropertyDetails.TotalNumberOfRooms,
+		NumberOfRooms:          residentialRentalPropertyDetails.NumberOfRooms,
 		TypeOfExteriorSecurity: residentialRentalPropertyDetails.TypeOfExteriorSecurity,
 		TenantRequirements:     residentialRentalPropertyDetails.TenantRequirements,
 		Manager:                *manager,
@@ -150,7 +150,7 @@ func UpdateResidentialRentalPropertyDetails(c *gin.Context) {
 	oldResidentialRentalPropertyData.IsTiled = residentialRentalPropertyUpdates.IsTiled
 	oldResidentialRentalPropertyData.HasBoreHole = residentialRentalPropertyUpdates.HasBoreHole
 	oldResidentialRentalPropertyData.HasCeiling = residentialRentalPropertyUpdates.HasCeiling
-	oldResidentialRentalPropertyData.TotalNumberOfRooms = residentialRentalPropertyUpdates.TotalNumberOfRooms
+	oldResidentialRentalPropertyData.NumberOfRooms = residentialRentalPropertyUpdates.NumberOfRooms
 	oldResidentialRentalPropertyData.TypeOfExteriorSecurity = residentialRentalPropertyUpdates.TypeOfExteriorSecurity
 	oldResidentialRentalPropertyData.TenantRequirements = residentialRentalPropertyUpdates.TenantRequirements
 	oldResidentialRentalPropertyData.Currency = residentialRentalPropertyUpdates.Currency

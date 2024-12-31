@@ -11,7 +11,7 @@ type ResidentialRentalProperty struct {
 	ManagerId              int                                   `json:"managerId"`
 	UniqueId               int                                   `json:"uniqueId"`
 	NumberOfRoomsToLet     int                                   `json:"numberOfRoomsToLet"`
-	TotalNumberOfRooms     int                                   `json:"totalNumberOfRooms"`
+	NumberOfRooms          int                                   `json:"numberOfRooms"`
 	RentAmount             int                                   `json:"rentAmount"`
 	NumberOfGarages        int                                   `json:"numberOfGarages"`
 	SizeNumber             int                                   `json:"sizeNumber"`
