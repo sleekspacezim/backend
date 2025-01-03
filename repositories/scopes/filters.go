@@ -65,68 +65,76 @@ func PriceFilter(c *gin.Context) func(db *gorm.DB) *gorm.DB {
 
 func NumberOfRoomsFilter(c *gin.Context) func(db *gorm.DB) *gorm.DB {
 	totalRooms := c.DefaultQuery("number_of_rooms", "")
-	if totalRooms == "8+" {
+	if totalRooms == "8plus" {
 		return func(db *gorm.DB) *gorm.DB {
 			return db.Where("number_of_rooms > ?", 7)
 		}
-	} else if totalRooms != "" && totalRooms != "8+" {
+	} else if totalRooms == "" {
 		return func(db *gorm.DB) *gorm.DB {
-			return db.Where("number_of_rooms = ?", totalRooms)
+			return db
 		}
 	} else {
 		return func(db *gorm.DB) *gorm.DB {
-			return db
+			return db.Where("number_of_rooms = ?", totalRooms)
 		}
 	}
 }
 
 func NumberOfRoomsToLetFilter(c *gin.Context) func(db *gorm.DB) *gorm.DB {
 	numberOfRoomsToLet := c.DefaultQuery("number_of_rooms_to_rent", "")
-	if numberOfRoomsToLet == "8+" {
+	if numberOfRoomsToLet == "8plus" {
 		return func(db *gorm.DB) *gorm.DB {
 			return db.Where("number_of_rooms_to_let > ?", 7)
 		}
-	} else if numberOfRoomsToLet != "" && numberOfRoomsToLet != "8+" {
+	} else if numberOfRoomsToLet == "" {
 		return func(db *gorm.DB) *gorm.DB {
-			return db.Where("number_of_rooms_to_let = ?", numberOfRoomsToLet)
+			return db
+		}
+	} else if numberOfRoomsToLet == "full house" {
+		return func(db *gorm.DB) *gorm.DB {
+			return db.Where("is_full_house = ?", true)
+		}
+	} else if numberOfRoomsToLet == "full space" {
+		return func(db *gorm.DB) *gorm.DB {
+			return db.Where("is_full_space = ?", true)
 		}
 	} else {
 		return func(db *gorm.DB) *gorm.DB {
-			return db
+			return db.Where("number_of_rooms_to_let = ?", numberOfRoomsToLet)
 		}
 	}
 }
 
 func BedroomsFilter(c *gin.Context) func(db *gorm.DB) *gorm.DB {
 	numberOfRoomsBedrooms := c.DefaultQuery("bedrooms", "")
-	if numberOfRoomsBedrooms == "8+" {
+	if numberOfRoomsBedrooms == "8plus" {
 		return func(db *gorm.DB) *gorm.DB {
 			return db.Where("bedrooms > ?", 7)
 		}
-	} else if numberOfRoomsBedrooms != "" && numberOfRoomsBedrooms != "8+" {
+	} else if numberOfRoomsBedrooms == "" {
 		return func(db *gorm.DB) *gorm.DB {
-			return db.Where("bedrooms = ?", numberOfRoomsBedrooms)
+			return db
 		}
 	} else {
 		return func(db *gorm.DB) *gorm.DB {
-			return db
+			return db.Where("bedrooms = ?", numberOfRoomsBedrooms)
 		}
 	}
 }
 
 func BathroomsFilter(c *gin.Context) func(db *gorm.DB) *gorm.DB {
 	numberOfRoomsBathrooms := c.DefaultQuery("bathrooms", "")
-	if numberOfRoomsBathrooms == "8+" {
+	if numberOfRoomsBathrooms == "8plus" {
 		return func(db *gorm.DB) *gorm.DB {
 			return db.Where("bathrooms > ?", 7)
 		}
-	} else if numberOfRoomsBathrooms != "" && numberOfRoomsBathrooms != "8+" {
+	} else if numberOfRoomsBathrooms == "" {
 		return func(db *gorm.DB) *gorm.DB {
-			return db.Where("bathrooms = ?", numberOfRoomsBathrooms)
+			return db
 		}
 	} else {
 		return func(db *gorm.DB) *gorm.DB {
-			return db
+			return db.Where("bathrooms = ?", numberOfRoomsBathrooms)
 		}
 	}
 }
