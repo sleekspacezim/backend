@@ -4,7 +4,7 @@ import (
 	"SleekSpace/db"
 	managerModels "SleekSpace/models/manager"
 	pagination "SleekSpace/repositories"
-	sort "SleekSpace/repositories/scopes"
+	scopes "SleekSpace/repositories/scopes"
 	"errors"
 
 	"github.com/gin-gonic/gin"
@@ -64,7 +64,16 @@ func GetAllCommercialRentalProperties(c *gin.Context) []managerModels.Commercial
 	err := db.DB.Preload(clause.Associations).
 		Preload("Manager.ProfilePicture").
 		Preload("Manager.ManagerContactNumbers").
-		Scopes(pagination.Paginate(c), sort.SortProperties(c)).
+		Scopes(
+			scopes.SortProperties(c),
+			scopes.RentFilter(c),
+			scopes.PropertyStructureTypeFilter(c),
+			scopes.CurrencyFilter(c),
+			scopes.PropertySizeFilter(c),
+			scopes.NumberOfRoomsFilter(c),
+			scopes.NumberOfRoomsToLetFilter(c),
+			pagination.Paginate(c),
+		).
 		Find(&properties)
 	if err != nil {
 		println(err.Error, err.Name())
@@ -80,7 +89,7 @@ func GetAllCommercialRentalPropertiesByLocation(c *gin.Context, location string)
 		Preload("Manager.ManagerContactNumbers").
 		Joins("JOIN property_locations ON property_locations.property_id = commercial_rental_properties.unique_id").
 		Where("property_locations.display_name ILIKE ?", "%"+location+"%").
-		Scopes(pagination.Paginate(c), sort.SortProperties(c)).
+		Scopes(pagination.Paginate(c), scopes.SortProperties(c)).
 		Find(&properties)
 	if err != nil {
 		println(err.Error, err.Name())

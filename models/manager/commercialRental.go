@@ -11,6 +11,7 @@ type CommercialRentalProperty struct {
 	ManagerId             int                                   `json:"managerId"`
 	UniqueId              int                                   `json:"uniqueId"`
 	NumberOfRooms         int                                   `json:"numberOfRooms"`
+	NumberOfRoomsToLet    int                                   `json:"numberOfRoomsToLet"`
 	RentAmount            int                                   `json:"rentAmount"`
 	SizeNumber            int                                   `json:"sizeNumber"`
 	Storeys               int                                   `json:"storeys"`

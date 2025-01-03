@@ -62,6 +62,7 @@ func CreateCommercialRentalProperty(c *gin.Context) {
 		HasElectricity:        commercialRentalPropertyDetails.HasElectricity,
 		HasWater:              commercialRentalPropertyDetails.HasWater,
 		NumberOfRooms:         commercialRentalPropertyDetails.NumberOfRooms,
+		NumberOfRoomsToLet:    commercialRentalPropertyDetails.NumberOfRoomsToLet,
 		IsFullSpace:           commercialRentalPropertyDetails.IsFullSpace,
 		OtherExteriorFeatures: commercialRentalPropertyDetails.OtherExteriorFeatures,
 		OtherInteriorFeatures: commercialRentalPropertyDetails.OtherInteriorFeatures,
@@ -135,6 +136,7 @@ func UpdateCommercialRentalPropertyDetails(c *gin.Context) {
 	oldCommercialRentalPropertyData.OtherInteriorFeatures = commercialRentalPropertyUpdates.OtherInteriorFeatures
 	oldCommercialRentalPropertyData.Currency = commercialRentalPropertyUpdates.Currency
 	oldCommercialRentalPropertyData.MarketingStatement = commercialRentalPropertyUpdates.MarketingStatement
+	oldCommercialRentalPropertyData.NumberOfRoomsToLet = commercialRentalPropertyUpdates.NumberOfRoomsToLet
 
 	isCommercialRentalPropertyUpdated := commercialRepo.UpdateCommercialRentalProperty(oldCommercialRentalPropertyData)
 	if !isCommercialRentalPropertyUpdated {

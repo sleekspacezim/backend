@@ -10,7 +10,7 @@ import (
 type ResidentialPropertyForRentCreationDto struct {
 	ManagerId              int                                                                `json:"managerId"`
 	NumberOfRoomsToLet     int                                                                `json:"numberOfRoomsToLet"`
-	TotalNumberOfRooms     int                                                                `json:"totalNumberOfRooms"`
+	NumberOfRooms          int                                                                `json:"numberOfRooms"`
 	RentAmount             int                                                                `json:"rentAmount"`
 	NumberOfGarages        int                                                                `json:"numberOfGarages"`
 	SizeNumber             int                                                                `json:"sizeNumber"`
@@ -46,7 +46,7 @@ type ResidentialPropertyForRentResponseDto struct {
 	ManagerId              int                                                `json:"managerId"`
 	UniqueId               int                                                `json:"uniqueId"`
 	NumberOfRoomsToLet     int                                                `json:"numberOfRoomsToLet"`
-	TotalNumberOfRooms     int                                                `json:"totalNumberOfRooms"`
+	NumberOfRooms          int                                                `json:"numberOfRooms"`
 	RentAmount             int                                                `json:"rentAmount"`
 	NumberOfGarages        int                                                `json:"numberOfGarages"`
 	SizeNumber             int                                                `json:"sizeNumber"`
@@ -85,7 +85,7 @@ type ResidentialPropertyForRentWithManagerResponseDto struct {
 	ManagerId              int                                                `json:"managerId"`
 	UniqueId               int                                                `json:"uniqueId"`
 	NumberOfRoomsToLet     int                                                `json:"numberOfRoomsToLet"`
-	TotalNumberOfRooms     int                                                `json:"totalNumberOfRooms"`
+	NumberOfRooms          int                                                `json:"numberOfRooms"`
 	RentAmount             int                                                `json:"rentAmount"`
 	NumberOfGarages        int                                                `json:"numberOfGarages"`
 	SizeNumber             int                                                `json:"sizeNumber"`
@@ -125,7 +125,7 @@ type ResidentialPropertyForRentUpdateDto struct {
 	ManagerId              int      `json:"managerId"`
 	UniqueId               int      `json:"uniqueId"`
 	NumberOfRoomsToLet     int      `json:"numberOfRoomsToLet"`
-	TotalNumberOfRooms     int      `json:"totalNumberOfRooms"`
+	NumberOfRooms          int      `json:"numberOfRooms"`
 	RentAmount             int      `json:"rentAmount"`
 	NumberOfGarages        int      `json:"numberOfGarages"`
 	SizeNumber             int      `json:"sizeNumber"`

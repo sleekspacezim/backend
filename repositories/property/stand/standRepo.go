@@ -4,7 +4,7 @@ import (
 	"SleekSpace/db"
 	managerModels "SleekSpace/models/manager"
 	pagination "SleekSpace/repositories"
-	sort "SleekSpace/repositories/scopes"
+	scopes "SleekSpace/repositories/scopes"
 	"errors"
 
 	"github.com/gin-gonic/gin"
@@ -64,7 +64,14 @@ func GetAllStands(c *gin.Context) []managerModels.Stand {
 	err := db.DB.Preload(clause.Associations).
 		Preload("Manager.ProfilePicture").
 		Preload("Manager.ManagerContactNumbers").
-		Scopes(pagination.Paginate(c), sort.SortProperties(c)).
+		Scopes(
+			scopes.SortProperties(c),
+			scopes.PriceFilter(c),
+			scopes.PropertyStructureTypeFilter(c),
+			scopes.CurrencyFilter(c),
+			scopes.PropertySizeFilter(c),
+			pagination.Paginate(c),
+		).
 		Find(&stands)
 	if err != nil {
 		println(err.Error, err.Name())
@@ -83,7 +90,10 @@ func GetAllStandsByLocation(
 		Preload("Manager.ManagerContactNumbers").
 		Joins("JOIN property_locations ON property_locations.property_id = stands.unique_id").
 		Where("property_locations.display_name ILIKE ?", "%"+location+"%").
-		Scopes(pagination.Paginate(c), sort.SortProperties(c)).
+		Scopes(
+			scopes.SortProperties(c),
+			pagination.Paginate(c),
+		).
 		Find(&properties)
 	if err != nil {
 		println(err.Error, err.Name())
