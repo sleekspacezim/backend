@@ -214,16 +214,27 @@ func GetLandPropertyByIdForLoggedInUser(c *gin.Context) {
 }
 
 func GetManagerLandPropertiesByManagerId(c *gin.Context) {
-	landProperties := landRepo.GetManagerLandPropertiesForSaleByManagerId(c.Param("id"))
-	landPropertiesResponse := []landDtos.LandForSalePropertyResponseDto{}
-	if len(landProperties) > 0 {
-		for i := 0; i < len(landProperties); i++ {
-			landResponse := propertyUtilities.LandPropertyResponse(landProperties[i])
-			landPropertiesResponse = append(landPropertiesResponse, landResponse)
+	managerProperties := landRepo.GetManagerLandPropertiesForSaleByManagerId(c.Param("id"))
+	propertyIdList := []int{}
+	if len(managerProperties) > 0 {
+		for i := 0; i < len(managerProperties); i++ {
+			propertyIdList = append(propertyIdList, managerProperties[i].Id)
+		}
+	}
+	properties := landRepo.GetLandPropertyForSaleByIds(propertyIdList, c)
+	propertiesResponse := []landDtos.LandForSalePropertyWithManagerResponseDto{}
+	if len(properties) > 0 {
+		for i := 0; i < len(properties); i++ {
+			propertyResponse := propertyUtilities.LandPropertyWithManagerResponse(properties[i])
+			propertiesResponse = append(propertiesResponse, propertyResponse)
 		}
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"response": favoritesUtilities.ProcessFavoritesForLandPropertyWithoutManager(landPropertiesResponse, c),
+		"properties": favoritesUtilities.ProcessFavoritesForLandPropertyWithManager(
+			propertiesResponse, c,
+		),
+		"totalPages": c.GetInt("totalPages"),
+		"count":      c.GetInt64("count"),
 	})
 }
 

@@ -29,6 +29,22 @@ func GetResidentialPropertyForSaleById(id string) *managerModels.ResidentialProp
 	return &property
 }
 
+func GetResidentialPropertyForSaleByIds(ids []int, c *gin.Context) []managerModels.ResidentialPropertyForSale {
+	var properties = []managerModels.ResidentialPropertyForSale{}
+	result := db.DB.Where("id IN ?", ids).
+		Preload(clause.Associations).
+		Preload("Manager.ProfilePicture").
+		Preload("Manager.ManagerContactNumbers").
+		Order("created_at DESC, id DESC").
+		Scopes(pagination.Paginate(c)).
+		Find(&properties)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return nil
+	}
+	return properties
+
+}
+
 func GetResidentialPropertyForSaleWithAllAssociationsById(id string) *managerModels.ResidentialPropertyForSale {
 	var property managerModels.ResidentialPropertyForSale
 	result := db.DB.Preload(clause.Associations).
