@@ -216,15 +216,28 @@ func GetStandByIdForLoggedInUser(c *gin.Context) {
 }
 
 func GetManagerStandsByManagerId(c *gin.Context) {
-	stands := standRepo.GetManagerStandsByManagerId(c.Param("id"))
-	standsResponse := []standDtos.StandResponseDTO{}
-	if len(stands) > 0 {
-		for i := 0; i < len(stands); i++ {
-			standResponse := propertyUtilities.PropertyStandResponse(stands[i])
-			standsResponse = append(standsResponse, standResponse)
+	managerProperties := standRepo.GetManagerStandsByManagerId(c.Param("id"))
+	propertyIdList := []int{}
+	if len(managerProperties) > 0 {
+		for i := 0; i < len(managerProperties); i++ {
+			propertyIdList = append(propertyIdList, managerProperties[i].Id)
 		}
 	}
-	c.JSON(http.StatusOK, gin.H{"response": standsResponse})
+	properties := standRepo.GetStandPropertyForSaleByIds(propertyIdList, c)
+	propertiesResponse := []standDtos.StandWithManagerResponseDTO{}
+	if len(properties) > 0 {
+		for i := 0; i < len(properties); i++ {
+			propertyResponse := propertyUtilities.PropertyStandWithManagerResponse(properties[i])
+			propertiesResponse = append(propertiesResponse, propertyResponse)
+		}
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"properties": favoritesUtilities.ProcessFavoritesForStandPropertyWithManager(
+			propertiesResponse, c,
+		),
+		"totalPages": c.GetInt("totalPages"),
+		"count":      c.GetInt64("count"),
+	})
 }
 
 func GetAllStandsByLocationForLoggedInUser(c *gin.Context) {

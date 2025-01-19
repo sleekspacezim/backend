@@ -52,7 +52,10 @@ func GetLandPropertyForSaleWithAllAssociationsByUniqueId(uniqueId string) *manag
 
 func GetLandPropertyForSaleWithAllAssociationsById(id string) *managerModels.LandForSaleProperty {
 	var land managerModels.LandForSaleProperty
-	result := db.DB.Preload(clause.Associations).Preload("Manager.ProfilePicture").Preload("Manager.ManagerContactNumbers").First(&land, id)
+	result := db.DB.Preload(clause.Associations).
+		Preload("Manager.ProfilePicture").
+		Preload("Manager.ManagerContactNumbers").
+		First(&land, id)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil
 	}
@@ -66,6 +69,22 @@ func GetManagerLandPropertiesForSaleByManagerId(managerId string) []managerModel
 		return nil
 	}
 	return manager.LandForSaleProperty
+}
+
+func GetLandPropertyForSaleByIds(ids []int, c *gin.Context) []managerModels.LandForSaleProperty {
+	var properties = []managerModels.LandForSaleProperty{}
+	result := db.DB.Where("id IN ?", ids).
+		Preload(clause.Associations).
+		Preload("Manager.ProfilePicture").
+		Preload("Manager.ManagerContactNumbers").
+		Order("created_at DESC, id DESC").
+		Scopes(pagination.Paginate(c)).
+		Find(&properties)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return nil
+	}
+	return properties
+
 }
 
 func GetAllLandPropertiesForSale(c *gin.Context) []managerModels.LandForSaleProperty {

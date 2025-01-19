@@ -292,18 +292,27 @@ func GetResidentialPropertyForSaleByIdLoggedInUser(c *gin.Context) {
 }
 
 func GetManagerResidentialPropertiesForSaleByManagerId(c *gin.Context) {
-	properties := residentialRepo.GetManagerResidentialPropertiesForSaleByManagerId(c.Param("id"))
-	propertiesResponse := []residentialDtos.ResidentialPropertyForSaleResponseDto{}
+	managerProperties := residentialRepo.GetManagerResidentialPropertiesForSaleByManagerId(c.Param("id"))
+	propertyIdList := []int{}
+	if len(managerProperties) > 0 {
+		for i := 0; i < len(managerProperties); i++ {
+			propertyIdList = append(propertyIdList, managerProperties[i].Id)
+		}
+	}
+	properties := residentialRepo.GetResidentialPropertyForSaleByIds(propertyIdList, c)
+	propertiesResponse := []residentialDtos.ResidentialPropertyForSaleWithManagerResponseDto{}
 	if len(properties) > 0 {
 		for i := 0; i < len(properties); i++ {
-			propertyResponse := propertyUtilities.ResidentialForSalePropertyResponse(properties[i])
+			propertyResponse := propertyUtilities.ResidentialForSalePropertyWithManagerResponse(properties[i])
 			propertiesResponse = append(propertiesResponse, propertyResponse)
 		}
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"response": favoritesUtilities.ProcessFavoritesForResidentialForSalePropertyWithoutManager(
+		"properties": favoritesUtilities.ProcessFavoritesForResidentialForSalePropertyWithManager(
 			propertiesResponse, c,
 		),
+		"totalPages": c.GetInt("totalPages"),
+		"count":      c.GetInt64("count"),
 	})
 }
 

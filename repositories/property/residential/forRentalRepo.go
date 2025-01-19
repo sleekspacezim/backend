@@ -31,7 +31,8 @@ func GetResidentialRentalPropertyById(id string) *managerModels.ResidentialRenta
 
 func GetResidentialRentalPropertyWithAllAssociationsById(id string) *managerModels.ResidentialRentalProperty {
 	var property managerModels.ResidentialRentalProperty
-	result := db.DB.Preload(clause.Associations).
+	result := db.DB.
+		Preload(clause.Associations).
 		Preload("Manager.ProfilePicture").
 		Preload("Manager.ManagerContactNumbers").
 		First(&property, id)
@@ -54,7 +55,8 @@ func GetResidentialRentalPropertyWithAllAssociationsByUniqueId(uniqueId string) 
 
 func GetManagerResidentialRentalPropertiesByManagerId(managerId string) []managerModels.ResidentialRentalProperty {
 	var manager = managerModels.Manager{}
-	result := db.DB.Preload("ResidentialRentalProperty").
+	result := db.DB.
+		Preload("ResidentialRentalProperty").
 		First(&manager, managerId)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil
@@ -62,9 +64,26 @@ func GetManagerResidentialRentalPropertiesByManagerId(managerId string) []manage
 	return manager.ResidentialRentalProperty
 }
 
+func GetResidentialRentalPropertyByIds(ids []int, c *gin.Context) []managerModels.ResidentialRentalProperty {
+	var properties = []managerModels.ResidentialRentalProperty{}
+	result := db.DB.Where("id IN ?", ids).
+		Preload(clause.Associations).
+		Preload("Manager.ProfilePicture").
+		Preload("Manager.ManagerContactNumbers").
+		Order("created_at DESC, id DESC").
+		Scopes(pagination.Paginate(c)).
+		Find(&properties)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return nil
+	}
+	return properties
+
+}
+
 func GetAllResidentialRentalProperties(c *gin.Context) []managerModels.ResidentialRentalProperty {
 	var properties = []managerModels.ResidentialRentalProperty{}
-	err := db.DB.Preload(clause.Associations).
+	err := db.DB.
+		Preload(clause.Associations).
 		Preload("Manager.ProfilePicture").
 		Preload("Manager.ManagerContactNumbers").
 		Scopes(

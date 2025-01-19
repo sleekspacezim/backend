@@ -59,6 +59,22 @@ func GetManagerStandsByManagerId(managerId string) []managerModels.Stand {
 	return manager.Stand
 }
 
+func GetStandPropertyForSaleByIds(ids []int, c *gin.Context) []managerModels.Stand {
+	var properties = []managerModels.Stand{}
+	result := db.DB.Where("id IN ?", ids).
+		Preload(clause.Associations).
+		Preload("Manager.ProfilePicture").
+		Preload("Manager.ManagerContactNumbers").
+		Order("created_at DESC, id DESC").
+		Scopes(pagination.Paginate(c)).
+		Find(&properties)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return nil
+	}
+	return properties
+
+}
+
 func GetAllStands(c *gin.Context) []managerModels.Stand {
 	var stands = []managerModels.Stand{}
 	err := db.DB.Preload(clause.Associations).
