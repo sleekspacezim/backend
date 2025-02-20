@@ -46,37 +46,49 @@ func GetTimePassed(createdAt time.Time) string {
 	if seconds < 60 {
 		return ConvertIntToString(int(math.Floor(seconds))) + " seconds ago"
 	} else if minutes < 60 {
-		if math.Floor(minutes) == 1 {
+		if math.Floor(minutes) == 0 {
+			return "1 minute ago"
+		} else if math.Floor(minutes) == 1 {
 			return ConvertIntToString(int(math.Floor(minutes))) + " minute ago"
 		} else {
 			return ConvertIntToString(int(math.Floor(minutes))) + " minutes ago"
 		}
 	} else if math.Floor(hours) < 24 {
-		if math.Floor(hours) == 1 {
+		if math.Floor(hours) == 0 {
+			return "1 hour ago"
+		} else if math.Floor(hours) == 1 {
 			return ConvertIntToString(int(math.Floor(hours))) + " hour ago"
 		} else {
 			return ConvertIntToString(int(math.Floor(hours))) + " hours ago"
 		}
 	} else if math.Floor(days) < 7 {
-		if math.Floor(days) == 1 {
+		if math.Floor(days) == 0 {
+			return "1 day ago"
+		} else if math.Floor(days) == 1 {
 			return ConvertIntToString(int(math.Floor(days))) + " day ago"
 		} else {
 			return ConvertIntToString(int(math.Floor(days))) + " days ago"
 		}
 	} else if math.Floor(weeks) < 4 {
-		if math.Floor(weeks) == 1 {
+		if math.Floor(weeks) == 0 {
+			return "1 week ago"
+		} else if math.Floor(weeks) == 1 {
 			return ConvertIntToString(int(math.Floor(weeks))) + " week ago"
 		} else {
 			return ConvertIntToString(int(math.Floor(weeks))) + " weeks ago"
 		}
 	} else if math.Floor(months) < 12 {
-		if math.Floor(months) == 1 {
+		if math.Floor(months) == 0 {
+			return "1 month ago"
+		} else if math.Floor(months) == 1 {
 			return ConvertIntToString(int(math.Floor(months))) + " month ago"
 		} else {
 			return ConvertIntToString(int(math.Floor(months))) + " months ago"
 		}
 	} else {
-		if math.Floor(years) == 1 {
+		if math.Floor(years) == 0 {
+			return "1 year ago"
+		} else if math.Floor(years) == 1 {
 			return ConvertIntToString(int(math.Floor(years))) + " year ago"
 		} else {
 			return ConvertIntToString(int(math.Floor(years))) + " years ago"

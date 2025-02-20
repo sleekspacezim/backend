@@ -10,5 +10,8 @@ type PropertyInsights struct {
 	AddedToFavourites int    `json:"addedToFavourites"`
 	Shared            int    `json:"shared"`
 	ContactInfoViews  int    `json:"contactInfoViews"`
+	EmailAttempts     int    `json:"emailAttempts"`
+	CallAttempts      int    `json:"callAttempts"`
+	WhatsAppAttempts  int    `json:"whatsAppAttempts"`
 	PropertyType      string `json:"propertyType"`
 }

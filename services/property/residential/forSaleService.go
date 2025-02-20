@@ -80,6 +80,9 @@ func CreateResidentialPropertyForSale(c *gin.Context) {
 			Shared:            0,
 			AddedToFavourites: 0,
 			ContactInfoViews:  0,
+			EmailAttempts:     0,
+			CallAttempts:      0,
+			WhatsAppAttempts:  0,
 			PropertyType:      constants.ResidentialPropertyForSaleType,
 		},
 		PropertyMedia: propertyUtilities.ConvertPropertyImagesOrVideosWithNoPropertyIdToModel(
