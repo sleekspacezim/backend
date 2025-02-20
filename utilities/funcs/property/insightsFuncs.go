@@ -14,5 +14,8 @@ func PropertyInsightsResponse(insights propertyModels.PropertyInsights) property
 		AddedToFavourites: insights.AddedToFavourites,
 		Shared:            insights.Shared,
 		PropertyType:      insights.PropertyType,
+		EmailAttempts:     insights.EmailAttempts,
+		CallAttempts:      insights.CallAttempts,
+		WhatsAppAttempts:  insights.WhatsAppAttempts,
 	}
 }
